@@ -1,4 +1,4 @@
-const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbz-k_b4rrfoY_1UHhyfV5wA24mUYNkdcZKYpE7cLgbzI58NjNMEiIUnqiys3bcLLywaCw/exec";
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbyWLIElS5csQoG0W6DYcA7SMLi71_9-fIqoXn1qiviYLSZeMWLaf4Ht0G7d10Qvmuevig/exec";
 
 let inventory = [];
 let editingIndex = -1;

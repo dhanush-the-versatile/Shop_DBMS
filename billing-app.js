@@ -49,7 +49,7 @@ function renderCart() {
   let total = 0;
   cart.forEach((c, idx) => {
     let item = inventory[c.idx];
-    let price = Number(item.Market_Price) || 0;
+    let price = Number(item.MRP) || 0;
     let lineTotal = price * c.qty;
     total += lineTotal;
     html += `<tr>
@@ -89,8 +89,8 @@ async function finalizeBill() {
         Item_ID: item.Item_ID,
         Item: item['Item/వస్తువు'],
         Qty: c.qty,
-        Price: Number(item.Market_Price) || 0,
-        Total: (Number(item.Market_Price) || 0) * c.qty
+        Price: Number(item.MRP) || 0,
+        Total: (Number(item.Market_MRP) || 0) * c.qty
       };
     }),
   });

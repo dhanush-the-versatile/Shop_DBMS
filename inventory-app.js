@@ -125,7 +125,7 @@ function sendReorderWhatsApp() {
   if(reorderItems.length === 0) return alert("No items to reorder.");
   const msg = reorderItems.map(i =>
     `${i.Item_ID} (${i['Item/వస్తువు']}): Qty ${i.Quantity}, RL ${i.Reorder_Level}`).join('\n');
-  const url = `https://wa.me/?text=${encodeURIComponent("Reorder List:\n" + msg)}`;
+  const url = `https://wa.me/9440163952?text=${encodeURIComponent("Reorder List:\n" + msg)}`;
   window.open(url, '_blank');
 }
 

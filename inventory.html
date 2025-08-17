@@ -1,37 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Jhansi Kirana & E-JUNCTION Inventory</title>
-  <style>
-    body { font-family: Arial; max-width:900px; margin:auto; background:#f8f9fa;}
-    header { background: #3075b2; color: #fff; padding: 20px; }
-    .header-title { font-size: 2em; margin:0; }
-    .header-address { font-size: 1.1em; margin-top:8px;}
-    h2 { color:#3075b2; }
-    table { width:100%; border-collapse:collapse; margin:20px 0;}
-    th,td { border:1px solid #bbb; padding:10px; text-align:center;}
-    th { background:#e8eefa; color:#276db3; }
-    input, select { padding:6px; margin:2px; font-size:1em;}
-    button { font-size:1em; padding:7px 18px; margin:0 2px;}
-    .action-btn {font-size:1em; }
-    #msg { margin-top:15px; color:green; font-weight:bold;}
-    .editRow { background:#ffe;}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Inventory | Jhansi Kirana & E-JUNCTION</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <div class="header-title">
-      Jhansi Kirana & E-JUNCTION <span style="font-size:0.6em;">Since 2009</span>
-    </div>
-    <div class="header-address">
-      plot no 2456, Ysr Nagar, Near Kondakarakam Road, Vizianagaram<br>
+<header>
+  <div class="logo-area">
+    <h1>Jhansi Kirana & E-JUNCTION <span class="since">Since 2009</span></h1>
+    <div class="address">
+      plot no 2456, Ysr Nagar, Near Kondakarakam Road, Vizianagaram<br/>
       📞 9849377398, 9440163952
     </div>
-  </header>
-
-  <h2>Inventory Management (Google Sheet Synced)</h2>
-  <button onclick="addRowForm()">➕ Add New Item</button>
+  </div>
+  <nav>
+    <a href="inventory.html">Inventory</a>
+    <a href="billing.html">Billing</a>
+    <a href="returns.html">Returns</a>
+    <a href="reports.html">Reports</a>
+    <a href="dashboard.html" style="float:right;">Dashboard</a>
+  </nav>
+</header>
+<main>
+  <h2>Inventory Management</h2>
+  <button onclick="addNewItem()">➕ Add New Item</button>
+  <button onclick="sendReorderWhatsApp()">📱 Send Reorder List on WhatsApp</button>
+  <button onclick="sendReorderEmail()">✉️ Send Reorder List by Email</button>
   <div id="msg"></div>
   <table>
     <thead>
@@ -43,151 +39,12 @@
         <th>Market Price</th>
         <th>MRP</th>
         <th>Reorder Level</th>
-        <th>Action</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody id="invBody"></tbody>
   </table>
-
-<script>
-//------ CONFIG --------
-const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwi89ddGcVNICpBJ6oIHzOGxEH9BginJ58wxvV19RBZbUMpcbuZ87SUn8lWGMP-PzFWTA/exec";
-
-let inventory = [];
-let editingIndex = -1;
-
-async function fetchInventory() {
-  document.getElementById('msg').innerText = 'Loading from Google Sheet...';
-  try {
-    let resp = await fetch(SHEET_API_URL);
-    inventory = await resp.json();
-    renderInventory();
-    document.getElementById('msg').innerText = '';
-  } catch(e) {
-    document.getElementById('msg').innerText = "❌ Failed to load inventory!";
-  }
-}
-
-async function pushInventory() {
-  document.getElementById('msg').innerText = 'Saving to Google Sheet...';
-  try {
-    let resp = await fetch(SHEET_API_URL, {
-      method: "POST",
-      body: JSON.stringify(inventory),
-      headers: { "Content-Type": "application/json" }
-    });
-    let result = await resp.json();
-    if(result.ok) {
-      document.getElementById('msg').innerText = '✅ Inventory updated!';
-      fetchInventory();
-    } else {
-      document.getElementById('msg').innerText = "❌ Update failed: "+result.error;
-    }
-  } catch(e) {
-    document.getElementById('msg').innerText = "❌ Error saving!";
-  }
-}
-
-function renderInventory() {
-  const tbody = document.getElementById('invBody');
-  tbody.innerHTML = '';
-  inventory.forEach((item, i) => {
-    if(i == editingIndex) {
-      tbody.innerHTML += makeEditRow(item, i);
-    } else {
-      tbody.innerHTML += `
-        <tr>
-          <td>${item.Item_ID || ""}</td>
-          <td>${item["Item/వస్తువు"] || ""}</td>
-          <td>${item.Quantity || ""}</td>
-          <td>${item.Unit_Type || ""}</td>
-          <td>${item.Market_Price || ""}</td>
-          <td>${item.MRP || ""}</td>
-          <td>${item.Reorder_Level || ""}</td>
-          <td>
-           <button class="action-btn" onclick="editRow(${i})">Edit</button>
-           <button class="action-btn" onclick="deleteRow(${i})">Delete</button>
-          </td>
-        </tr>
-      `;
-    }
-  });
-}
-function makeEditRow(item, i){
-  return `
-    <tr class="editRow">
-      <td><input id="edit_id" value="${item.Item_ID||''}"></td>
-      <td><input id="edit_name" value="${item["Item/వస్తువు"]||''}"></td>
-      <td><input id="edit_qty" value="${item.Quantity||''}"></td>
-      <td><input id="edit_unit" value="${item.Unit_Type||''}"></td>
-      <td><input id="edit_mp" value="${item.Market_Price||''}"></td>
-      <td><input id="edit_mrp" value="${item.MRP||''}"></td>
-      <td><input id="edit_rl" value="${item.Reorder_Level||''}"></td>
-      <td>
-        <button class="action-btn" onclick="saveEdit(${i})">Save</button>
-        <button class="action-btn" onclick="cancelEdit()">Cancel</button>
-      </td>
-    </tr>
-  `;
-}
-function editRow(i) {
-  editingIndex = i;
-  renderInventory();
-}
-function saveEdit(i){
-  inventory[i] = {
-    Item_ID: document.getElementById('edit_id').value,
-    "Item/వస్తువు": document.getElementById('edit_name').value,
-    Quantity: document.getElementById('edit_qty').value,
-    Unit_Type: document.getElementById('edit_unit').value,
-    Market_Price: document.getElementById('edit_mp').value,
-    MRP: document.getElementById('edit_mrp').value,
-    Reorder_Level: document.getElementById('edit_rl').value
-  };
-  editingIndex = -1;
-  pushInventory();
-}
-function cancelEdit(){ editingIndex=-1; renderInventory();}
-function deleteRow(i){
-  if(confirm("Delete this item?")){
-    inventory.splice(i,1);
-    pushInventory();
-  }
-}
-function addRowForm(){
-  if(editingIndex!=-1) return; // edit in progress
-  const tbody = document.getElementById('invBody');
-  tbody.innerHTML = `
-    <tr class="editRow">
-      <td><input id="add_id"></td>
-      <td><input id="add_name"></td>
-      <td><input id="add_qty"></td>
-      <td><input id="add_unit"></td>
-      <td><input id="add_mp"></td>
-      <td><input id="add_mrp"></td>
-      <td><input id="add_rl"></td>
-      <td>
-        <button onclick="saveNew()">Add</button>
-        <button onclick="fetchInventory()">Cancel</button>
-      </td>
-    </tr>
-  ` + tbody.innerHTML;
-  editingIndex = -2;
-}
-function saveNew(){
-  inventory.unshift({
-    Item_ID: document.getElementById('add_id').value,
-    "Item/వస్తువు": document.getElementById('add_name').value,
-    Quantity: document.getElementById('add_qty').value,
-    Unit_Type: document.getElementById('add_unit').value,
-    Market_Price: document.getElementById('add_mp').value,
-    MRP: document.getElementById('add_mrp').value,
-    Reorder_Level: document.getElementById('add_rl').value
-  });
-  editingIndex = -1;
-  pushInventory();
-}
-window.onload = fetchInventory;
-</script>
+</main>
+<script src="inventory-app.js"></script>
 </body>
 </html>

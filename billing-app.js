@@ -1,4 +1,4 @@
-const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwi89ddGcVNICpBJ6oIHzOGxEH9BginJ58wxvV19RBZbUMpcbuZ87SUn8lWGMP-PzFWTA/exec";
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbz-k_b4rrfoY_1UHhyfV5wA24mUYNkdcZKYpE7cLgbzI58NjNMEiIUnqiys3bcLLywaCw/exec";
 
 let inventory = [];
 let bills = [];

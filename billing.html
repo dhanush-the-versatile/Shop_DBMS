@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Billing | Jhansi Kirana & E-JUNCTION</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <div class="logo-area">
+    <h1>Jhansi Kirana & E-JUNCTION <span class="since">Since 2009</span></h1>
+    <div class="address">
+      plot no 2456, Ysr Nagar, Near Kondakarakam Road, Vizianagaram<br/>
+      📞 9849377398, 9440163952
+    </div>
+  </div>
+  <nav>
+    <a href="inventory.html">Inventory</a>
+    <a href="billing.html">Billing</a>
+    <a href="returns.html">Returns</a>
+    <a href="reports.html">Reports</a>
+    <a href="dashboard.html" style="float:right;">Dashboard</a>
+  </nav>
+</header>
+<main>
+  <h2>Billing</h2>
+  <form id="billForm">
+    <select id="billItem"></select><br/>
+    <input type="number" id="billQty" value="1" min="1" /><br/>
+    <button type="button" onclick="addToBill()">Add to Bill</button>
+    <button type="button" onclick="finalizeBill()">Finalize Bill</button>
+    <button type="button" onclick="clearBill()">Clear Bill</button>
+  </form>
+  <div id="cart"></div>
+  <div id="msg"></div>
+</main>
+<script src="billing-app.js"></script>
+</body>
+</html>

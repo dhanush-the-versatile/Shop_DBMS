@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <title>Login | Jhansi Kirana & E-JUNCTION</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -10,7 +11,7 @@
     <h2>Jhansi Kirana & E-JUNCTION<br>Since 2009</h2>
     <p class="address">
       plot no 2456, Ysr Nagar,<br>
-      Near Kondakarakam Road, Vizianagaram<br>
+      Near Kondakarakam Road, Vizianagaram<br/>
       📞 9849377398, 9440163952
     </p>
     <form id="loginForm" autocomplete="off">
@@ -21,7 +22,7 @@
     <div id="loginMsg"></div>
   </div>
 <script>
-document.getElementById("loginForm").onsubmit = function (e) {
+document.getElementById("loginForm").onsubmit = function(e) {
   e.preventDefault();
   const u = document.getElementById("username").value.trim();
   const p = document.getElementById("password").value.trim();
